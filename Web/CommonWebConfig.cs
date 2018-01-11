@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+﻿using BotCommon.Storage;
+using Newtonsoft.Json;
 using System.Web.Http;
 
 namespace BotCommon.Web
@@ -11,15 +11,10 @@ namespace BotCommon.Web
     {
         public static void Register(HttpConfiguration config)
         {
-            config.Formatters.JsonFormatter.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            config.Formatters.JsonFormatter.SerializerSettings.Formatting = Formatting.Indented;
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                Formatting = Formatting.Indented,
-                NullValueHandling = NullValueHandling.Ignore,
-            };
+            config.Formatters.JsonFormatter.SerializerSettings.NullValueHandling = Serializer.Settings.NullValueHandling;
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = Serializer.Settings.ContractResolver;
+            config.Formatters.JsonFormatter.SerializerSettings.Formatting = Serializer.Settings.Formatting;
+            JsonConvert.DefaultSettings = () => Serializer.Settings;
 
             config.MapHttpAttributeRoutes();
 
